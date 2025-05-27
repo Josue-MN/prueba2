@@ -23,15 +23,20 @@ function validar(){
         personas.push(persona)
         eNombre.value = ""
         eEdad.value = ""
-        console.log(personas)
     }
     cargarTabla()
 
 }
 
 function validarLargoAncho(elemento,valor,error){
-    
-    if(valor.length <= 0){
+    valor = valor.trim()
+
+    if(!/^[a-zA]+$/.test(valor)){
+        error.innerText = "Debe ingresar algun valor tipo texto, sin espacios, ni caracteres especiales"
+        elemento.style.backgroundColor = "blue"
+        elemento.style.color = "white"
+    }
+    else if(valor.length <= 0){
         error.innerText = "Debe ingresar algun valor para el Nombre"
         elemento.style.backgroundColor = "red"
         elemento.style.color = "white"
@@ -47,7 +52,9 @@ function validarLargoAncho(elemento,valor,error){
         elemento.style.color = "white"
         return true
     }
+
 }
+    
 
 
 
@@ -93,7 +100,20 @@ function cargarTabla(){
             })
 }
 
-function CargarDatos(indice){
+function cargarDatos(indice){
+    let eNombre = document.getElementById("nombre1")
+    let eEdad = document.getElementById("edad1")
+
+    let persona = personas.filter((p,index)=>{
+        if(indice === index){
+            return p
+        }
+    })
+    eNombre.value = persona[0].nombre
+    eEdad.value = persona[0].edad
+}
+
+function actualizar(){
     let eNombre = document.getElementById("nombre1")
     let vNombre = eNombre.value
     let eErrorNombre = document.getElementById("errorNombre1")
@@ -106,31 +126,35 @@ function CargarDatos(indice){
     let vlmEdad = validarLargoAnchoEdad(eEdad,vEdad,eErrorEdad)
 
     if(vlmNombre && vlmEdad){
-        let persona = personas.map((p,index)=>{
-            if(indice === index){
-                let persona = {
-                    nombre: p.nombre,
-                    edad: p.edad
+        
+        let eBtn = document.getElementById("btn")
+        let vBtn = eBtn.value
+        personas = personas.map((p,index)=>{
+            if(vBtn == index){
+                return{
+                    nombre: vNombre,
+                    edad: vEdad
                 }
-                eNombre.value = p[0].nombre
-                eNombre.value = p[0].edad
             }
+            else{
+                return p
+            }
+        })
+        cargarTabla()
+
+        }
+
+    }
+
+function eliminar(indice){
+
+    if(confirm("deseas borrar a la persona?")){
+        personas = personas.filter((p,index)=>{
+        if(index != indice){
+            return p
+        }
     })
-        personas.push(persona)
-        eNombre.value = ""
-        eEdad.value = ""
-        console.log(personas)
     }
     cargarTabla()
+
 }
-
-
-/*if(vlmNombre && vlmEdad){
-    persona = 
-    personas.push(persona)
-    
-
-
-
-
-} */
